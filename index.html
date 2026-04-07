@@ -16,7 +16,6 @@
       padding: 24px 16px 48px;
     }
 
-    /* Header */
     .app-header {
       display: flex;
       align-items: center;
@@ -28,7 +27,6 @@
     }
     .app-header span { font-size: 24px; }
 
-    /* Card */
     .card {
       background: white;
       border-radius: 20px;
@@ -38,7 +36,7 @@
       overflow: hidden;
     }
 
-    /* Card header */
+    /* Header verde */
     .card-header {
       background: linear-gradient(135deg, #1B4332, #2D6A4F);
       padding: 20px;
@@ -61,16 +59,8 @@
     }
     .pet-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .pet-header-info { flex: 1; }
-    .pet-name {
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-    }
-    .pet-breed {
-      font-size: 13px;
-      color: rgba(255,255,255,0.85);
-      margin-top: 2px;
-    }
+    .pet-name { font-size: 22px; font-weight: 800; color: white; }
+    .pet-breed { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 2px; }
     .pet-id-badge {
       background: rgba(255,255,255,0.2);
       border-radius: 6px;
@@ -82,15 +72,23 @@
       margin-top: 6px;
       display: inline-block;
     }
-    .pawrtner-logo {
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      text-align: center;
-      opacity: 0.9;
-    }
+    .pawrtner-logo { color: white; font-size: 11px; font-weight: 700; text-align: center; opacity: 0.9; }
 
-    /* Card body */
+    /* Sección dueño */
+    .owner-row {
+      background: rgba(45,106,79,0.05);
+      border-bottom: 1px solid #E5E7EB;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+    .owner-name { font-weight: 600; color: #1A1A2E; flex: 1; }
+    .owner-phone { color: #1A1A2E; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+    /* Cuerpo */
     .card-body { padding: 20px; }
     .info-row {
       display: flex;
@@ -114,10 +112,9 @@
       align-items: flex-start;
     }
 
-    /* Divider */
-    .divider { height: 1px; background: #E5E7EB; margin: 0; }
+    .divider { height: 1px; background: #E5E7EB; }
 
-    /* Medical history */
+    /* Historial */
     .history-header {
       display: flex;
       align-items: center;
@@ -158,15 +155,10 @@
       color: rgba(107,114,128,0.7);
     }
 
-    /* States */
-    .loading {
-      text-align: center;
-      padding: 48px 0;
-      color: #6B7280;
-    }
+    /* Estados */
+    .loading { text-align: center; padding: 48px 0; color: #6B7280; }
     .spinner {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border: 3px solid #E5E7EB;
       border-top-color: #2D6A4F;
       border-radius: 50%;
@@ -174,11 +166,7 @@
       margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .error-msg {
-      text-align: center;
-      padding: 48px 20px;
-      color: #E63946;
-    }
+    .error-msg { text-align: center; padding: 48px 20px; color: #E63946; }
     .error-msg h2 { font-size: 18px; margin-bottom: 8px; }
     .error-msg p { font-size: 14px; color: #6B7280; }
   </style>
@@ -208,11 +196,6 @@
       dog: '🐕', cat: '🐈', bird: '🐦',
       rabbit: '🐇', fish: '🐠', reptile: '🦎', other: '🐾'
     };
-    const TYPE_LABEL = {
-      vaccine: 'Vacuna', vetVisit: 'Visita veterinaria', grooming: 'Peluquería',
-      deworm: 'Desparasitación', medication: 'Medicamento',
-      surgery: 'Cirugía', exam: 'Control rutinario', other: 'Otro'
-    };
     const TYPE_EMOJI = {
       vaccine: '💉', vetVisit: '🩺', grooming: '✂️',
       deworm: '💊', medication: '🩹', surgery: '🔬', exam: '📋', other: '📌'
@@ -220,7 +203,7 @@
 
     function getPetId() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('id') || window.location.pathname.split('/').filter(Boolean).pop();
+      return params.get('id') || '';
     }
 
     function formatDate(dateStr) {
@@ -261,47 +244,63 @@
       if (!petId || petId.length < 10) { renderError('ID de mascota no válido'); return; }
 
       try {
+        // 1. Mascota + registros médicos en paralelo
         const [pets, records] = await Promise.all([
           fetchData(`pets?id=eq.${petId}&select=*`),
           fetchData(`medical_records?pet_id=eq.${petId}&select=*&order=date.desc&limit=5`)
         ]);
 
         if (!pets.length) { renderError('Mascota no encontrada'); return; }
-
         const p = pets[0];
+
+        // 2. Perfil del dueño (requiere policy pública de lectura en profiles)
+        let owner = null;
+        try {
+          const profiles = await fetchData(`profiles?id=eq.${p.user_id}&select=display_name,phone_number`);
+          owner = profiles[0] || null;
+        } catch (_) { /* sin perfil público — se omite sección dueño */ }
+
+        // ---- Render ----
         const shortId = p.id.substring(0, 8).toUpperCase();
         const emoji = SPECIES_EMOJI[p.species] || '🐾';
         const speciesLabel = SPECIES_LABEL[p.species] || p.species;
         const today = new Date().toLocaleDateString('es-CL');
 
-        let historyHtml = '';
-        if (records.length > 0) {
-          historyHtml = `
-            <div class="divider"></div>
-            <div class="history-header">🏥 Historial reciente</div>
-            <div class="history-list">
-              ${records.map(r => `
-                <div>
-                  <div class="history-item">
-                    <span class="history-emoji">${TYPE_EMOJI[r.type] || '📌'}</span>
-                    <span class="history-title">${r.title}</span>
-                    <span class="history-date">${formatDate(r.date)}</span>
-                  </div>
-                  ${r.next_due_date ? `<div class="history-next">📅 Próximo: ${formatDate(r.next_due_date)}</div>` : ''}
-                </div>
-              `).join('')}
-            </div>`;
-        }
-
-        const notesHtml = p.notes ? `
-          <div class="notes-box">
-            <span>📝</span>
-            <span>${p.notes}</span>
-          </div>` : '';
-
         const avatarHtml = p.photo_url
           ? `<img src="${p.photo_url}" alt="${p.name}" />`
           : emoji;
+
+        const ownerHtml = owner
+          ? `<div class="owner-row">
+               <span>👤</span>
+               <span class="owner-name">${owner.display_name || 'Dueño'}</span>
+               ${owner.phone_number
+                 ? `<span class="owner-phone">📞 ${owner.phone_number}</span>`
+                 : ''}
+             </div>`
+          : '';
+
+        const notesHtml = p.notes
+          ? `<div class="notes-box"><span>📝</span><span>${p.notes}</span></div>`
+          : '';
+
+        const historyHtml = records.length
+          ? `<div class="divider"></div>
+             <div class="history-header">🏥 Historial reciente</div>
+             <div class="history-list">
+               ${records.map(r => `
+                 <div>
+                   <div class="history-item">
+                     <span class="history-emoji">${TYPE_EMOJI[r.type] || '📌'}</span>
+                     <span class="history-title">${r.title}</span>
+                     <span class="history-date">${formatDate(r.date)}</span>
+                   </div>
+                   ${r.next_due_date
+                     ? `<div class="history-next">📅 Próximo: ${formatDate(r.next_due_date)}</div>`
+                     : ''}
+                 </div>`).join('')}
+             </div>`
+          : '';
 
         document.getElementById('card').innerHTML = `
           <div class="card-header">
@@ -314,28 +313,38 @@
             <div class="pawrtner-logo">🐾<br>Pawrtner</div>
           </div>
 
+          ${ownerHtml}
+
           <div class="card-body">
             <div class="info-row">
               <span class="info-icon">🎂</span>
-              <span><span class="info-label">Nacimiento: </span>
-              <span class="info-value">${formatDate(p.birth_date)} (${calcAge(p.birth_date)})</span></span>
+              <span>
+                <span class="info-label">Nacimiento: </span>
+                <span class="info-value">${formatDate(p.birth_date)} (${calcAge(p.birth_date)})</span>
+              </span>
             </div>
             <div class="info-row">
               <span class="info-icon">${p.sex === 'male' ? '♂️' : '♀️'}</span>
-              <span><span class="info-label">Sexo: </span>
-              <span class="info-value">${p.sex === 'male' ? 'Macho' : 'Hembra'}${p.is_neutered ? ' • Castrado/a' : ''}</span></span>
+              <span>
+                <span class="info-label">Sexo: </span>
+                <span class="info-value">${p.sex === 'male' ? 'Macho' : 'Hembra'}${p.is_neutered ? ' • Castrado/a' : ''}</span>
+              </span>
             </div>
             ${p.weight_kg ? `
             <div class="info-row">
               <span class="info-icon">⚖️</span>
-              <span><span class="info-label">Peso: </span>
-              <span class="info-value">${p.weight_kg} kg</span></span>
+              <span>
+                <span class="info-label">Peso: </span>
+                <span class="info-value">${p.weight_kg} kg</span>
+              </span>
             </div>` : ''}
             ${p.color ? `
             <div class="info-row">
               <span class="info-icon">🎨</span>
-              <span><span class="info-label">Color: </span>
-              <span class="info-value">${p.color}</span></span>
+              <span>
+                <span class="info-label">Color: </span>
+                <span class="info-value">${p.color}</span>
+              </span>
             </div>` : ''}
             ${notesHtml}
           </div>
