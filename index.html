@@ -16,17 +16,41 @@
       padding: 24px 16px 48px;
     }
 
+    /* Header */
     .app-header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 440px;
       gap: 8px;
       margin-bottom: 24px;
+    }
+    .app-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       color: #2D6A4F;
       font-weight: 800;
       font-size: 20px;
     }
-    .app-header span { font-size: 24px; }
+    .app-header-title span { font-size: 24px; }
+    .auth-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #2D6A4F;
+      background: white;
+      color: #2D6A4F;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .auth-btn.signed-in {
+      background: #2D6A4F;
+      color: white;
+    }
 
+    /* Card */
     .card {
       background: white;
       border-radius: 20px;
@@ -36,7 +60,7 @@
       overflow: hidden;
     }
 
-    /* Header verde */
+    /* Card header */
     .card-header {
       background: linear-gradient(135deg, #1B4332, #2D6A4F);
       padding: 20px;
@@ -59,8 +83,16 @@
     }
     .pet-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .pet-header-info { flex: 1; }
-    .pet-name { font-size: 22px; font-weight: 800; color: white; }
-    .pet-breed { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 2px; }
+    .pet-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+    }
+    .pet-breed {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 2px;
+    }
     .pet-id-badge {
       background: rgba(255,255,255,0.2);
       border-radius: 6px;
@@ -72,23 +104,15 @@
       margin-top: 6px;
       display: inline-block;
     }
-    .pawrtner-logo { color: white; font-size: 11px; font-weight: 700; text-align: center; opacity: 0.9; }
-
-    /* Sección dueño */
-    .owner-row {
-      background: rgba(45,106,79,0.05);
-      border-bottom: 1px solid #E5E7EB;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      flex-wrap: wrap;
+    .pawrtner-logo {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      opacity: 0.9;
     }
-    .owner-name { font-weight: 600; color: #1A1A2E; flex: 1; }
-    .owner-phone { color: #1A1A2E; font-weight: 500; display: flex; align-items: center; gap: 4px; }
 
-    /* Cuerpo */
+    /* Card body */
     .card-body { padding: 20px; }
     .info-row {
       display: flex;
@@ -112,18 +136,120 @@
       align-items: flex-start;
     }
 
-    .divider { height: 1px; background: #E5E7EB; }
+    /* Divider */
+    .divider { height: 1px; background: #E5E7EB; margin: 0; }
 
-    /* Historial */
-    .history-header {
+    /* Section header */
+    .section-header {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
       padding: 14px 20px 8px;
+    }
+    .section-title {
       font-size: 12px;
       font-weight: 700;
       color: #2D6A4F;
     }
+    .section-edit-btn {
+      font-size: 11px;
+      color: #2D6A4F;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .section-edit-btn:hover { background: #F0F4F2; }
+
+    /* Allergies */
+    .allergy-list { padding: 0 20px 16px; }
+    .allergy-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .allergy-item.mild { background: #F0FDF4; }
+    .allergy-item.moderate { background: #FFFBEB; }
+    .allergy-item.severe { background: #FFF1F2; }
+    .allergy-allergen { font-weight: 700; flex: 1; }
+    .allergy-allergen.mild { color: #166534; }
+    .allergy-allergen.moderate { color: #92400E; }
+    .allergy-allergen.severe { color: #BE123C; }
+    .allergy-meta { font-size: 11px; color: #6B7280; }
+    .allergy-action { display: flex; gap: 4px; }
+
+    /* Treatments */
+    .treatment-list { padding: 0 20px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .treatment-card {
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .treatment-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .treatment-condition { font-weight: 700; font-size: 14px; color: #1A1A2E; }
+    .treatment-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .status-active { background: #DCFCE7; color: #166534; }
+    .status-completed { background: #DBEAFE; color: #1D4ED8; }
+    .status-paused { background: #FEF3C7; color: #92400E; }
+    .status-archived { background: #F3F4F6; color: #6B7280; }
+    .treatment-desc { font-size: 12px; color: #6B7280; margin-bottom: 8px; }
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #6B7280;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: rgba(45,106,79,0.12);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #2D6A4F;
+      border-radius: 4px;
+      transition: width 0.4s;
+    }
+    .treatment-dates { font-size: 11px; color: #9CA3AF; margin-top: 6px; }
+    .treatment-actions { display: flex; gap: 4px; margin-top: 8px; }
+
+    /* Medications */
+    .medication-list { padding: 0 20px 16px; }
+    .medication-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #F3F4F6;
+      font-size: 13px;
+    }
+    .medication-item:last-child { border-bottom: none; }
+    .medication-icon { font-size: 18px; }
+    .medication-info { flex: 1; }
+    .medication-name { font-weight: 700; color: #1A1A2E; }
+    .medication-detail { font-size: 12px; color: #6B7280; }
+    .medication-reminder { font-size: 14px; }
+
+    /* Medical history */
     .history-list { padding: 0 20px 16px; }
     .history-item {
       display: flex;
@@ -155,10 +281,15 @@
       color: rgba(107,114,128,0.7);
     }
 
-    /* Estados */
-    .loading { text-align: center; padding: 48px 0; color: #6B7280; }
+    /* States */
+    .loading {
+      text-align: center;
+      padding: 48px 0;
+      color: #6B7280;
+    }
     .spinner {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border: 3px solid #E5E7EB;
       border-top-color: #2D6A4F;
       border-radius: 50%;
@@ -166,21 +297,136 @@
       margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .error-msg { text-align: center; padding: 48px 20px; color: #E63946; }
+    .error-msg {
+      text-align: center;
+      padding: 48px 20px;
+      color: #E63946;
+    }
     .error-msg h2 { font-size: 18px; margin-bottom: 8px; }
     .error-msg p { font-size: 14px; color: #6B7280; }
+    .empty-text {
+      font-size: 13px;
+      color: #9CA3AF;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    /* Auth modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .modal h3 { font-size: 18px; color: #1A1A2E; margin-bottom: 16px; }
+    .modal input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .modal input:focus { border-color: #2D6A4F; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .btn-primary {
+      flex: 1;
+      background: #2D6A4F;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      flex: 1;
+      background: white;
+      color: #6B7280;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .modal-error { font-size: 12px; color: #E63946; margin-bottom: 8px; }
+
+    /* Inline edit form */
+    .inline-form {
+      background: #F8FAF9;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    .inline-form input, .inline-form select, .inline-form textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 8px;
+      background: white;
+      outline: none;
+      font-family: inherit;
+    }
+    .inline-form input:focus, .inline-form select:focus { border-color: #2D6A4F; }
+    .inline-form .form-row { display: flex; gap: 8px; }
+    .inline-form .form-row input, .inline-form .form-row select { flex: 1; }
+    .form-label { font-size: 11px; color: #6B7280; margin-bottom: 4px; display: block; }
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      border-radius: 6px;
+      color: #6B7280;
+    }
+    .icon-btn:hover { background: #F3F4F6; color: #1A1A2E; }
+    .icon-btn.danger:hover { background: #FFF1F2; color: #BE123C; }
   </style>
 </head>
 <body>
 
   <div class="app-header">
-    <span>🐾</span> Pawrtner
+    <div class="app-header-title">
+      <span>🐾</span> Pawrtner
+    </div>
+    <button class="auth-btn" id="authBtn" onclick="toggleAuthModal()">Iniciar sesión</button>
   </div>
 
   <div class="card" id="card">
     <div class="loading">
       <div class="spinner"></div>
       <p>Cargando perfil...</p>
+    </div>
+  </div>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <h3>🔐 Iniciar sesión</h3>
+      <p id="authModalError" class="modal-error" style="display:none"></p>
+      <input type="email" id="authEmail" placeholder="Correo electrónico" />
+      <input type="password" id="authPassword" placeholder="Contraseña" />
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeAuthModal()">Cancelar</button>
+        <button class="btn-primary" onclick="signIn()">Entrar</button>
+      </div>
     </div>
   </div>
 
@@ -196,14 +442,29 @@
       dog: '🐕', cat: '🐈', bird: '🐦',
       rabbit: '🐇', fish: '🐠', reptile: '🦎', other: '🐾'
     };
+    const TYPE_LABEL = {
+      vaccine: 'Vacuna', vetVisit: 'Visita veterinaria', grooming: 'Peluquería',
+      deworm: 'Desparasitación', medication: 'Medicamento',
+      surgery: 'Cirugía', exam: 'Control rutinario', other: 'Otro'
+    };
     const TYPE_EMOJI = {
       vaccine: '💉', vetVisit: '🩺', grooming: '✂️',
       deworm: '💊', medication: '🩹', surgery: '🔬', exam: '📋', other: '📌'
     };
+    const ALLERGY_TYPE_LABEL = {
+      food: 'Comida', medication: 'Medicamento', environmental: 'Ambiental', other: 'Otro'
+    };
+    const SEVERITY_EMOJI = { mild: '🟢', moderate: '🟡', severe: '🔴' };
+    const SEVERITY_LABEL = { mild: 'Leve', moderate: 'Moderada', severe: 'Severa' };
+    const STATUS_LABEL = { active: 'Activo', completed: 'Completado', paused: 'Pausado', archived: 'Archivado' };
+
+    // Auth state
+    let currentUser = null;
+    let currentToken = ANON_KEY;
 
     function getPetId() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('id') || '';
+      return params.get('id') || window.location.pathname.split('/').filter(Boolean).pop();
     }
 
     function formatDate(dateStr) {
@@ -224,10 +485,48 @@
 
     async function fetchData(endpoint) {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
-        headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` }
+        headers: { apikey: ANON_KEY, Authorization: `Bearer ${currentToken}` }
       });
       if (!res.ok) throw new Error(res.status);
       return res.json();
+    }
+
+    async function postData(endpoint, body) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          apikey: ANON_KEY,
+          Authorization: `Bearer ${currentToken}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    async function patchData(endpoint, body) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+        method: 'PATCH',
+        headers: {
+          apikey: ANON_KEY,
+          Authorization: `Bearer ${currentToken}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    async function deleteData(endpoint) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+        method: 'DELETE',
+        headers: { apikey: ANON_KEY, Authorization: `Bearer ${currentToken}` }
+      });
+      if (!res.ok) throw new Error(await res.text());
     }
 
     function renderError(msg) {
@@ -239,68 +538,444 @@
         </div>`;
     }
 
+    // ── Auth ──────────────────────────────────────────────────────────────────
+
+    function toggleAuthModal() {
+      if (currentUser) {
+        signOut();
+      } else {
+        document.getElementById('authModal').classList.add('open');
+      }
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('open');
+      document.getElementById('authModalError').style.display = 'none';
+    }
+
+    async function signIn() {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const errEl = document.getElementById('authModalError');
+      errEl.style.display = 'none';
+      try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: 'POST',
+          headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error_description || data.msg || 'Error de autenticación');
+        currentUser = data.user;
+        currentToken = data.access_token;
+        document.getElementById('authBtn').textContent = '✓ ' + (data.user.email || 'Usuario');
+        document.getElementById('authBtn').classList.add('signed-in');
+        closeAuthModal();
+        load(); // reload with edit buttons
+      } catch (e) {
+        errEl.textContent = e.message;
+        errEl.style.display = 'block';
+      }
+    }
+
+    async function signOut() {
+      currentUser = null;
+      currentToken = ANON_KEY;
+      document.getElementById('authBtn').textContent = 'Iniciar sesión';
+      document.getElementById('authBtn').classList.remove('signed-in');
+      load(); // reload without edit buttons
+    }
+
+    // ── Allergies ─────────────────────────────────────────────────────────────
+
+    function renderAllergySection(allergies, petId) {
+      if (!allergies.length && !currentUser) return '';
+      const canEdit = !!currentUser;
+      const items = allergies.map(a => renderAllergyItem(a, canEdit)).join('');
+      const addBtn = canEdit
+        ? `<button class="section-edit-btn" onclick="showAddAllergyForm('${petId}')">+ Agregar</button>`
+        : '';
+      return `
+        <div class="divider"></div>
+        <div class="section-header">
+          <span class="section-title">⚠️ Alergias</span>
+          ${addBtn}
+        </div>
+        <div class="allergy-list" id="allergyList">
+          ${items || '<p class="empty-text">Sin alergias registradas</p>'}
+        </div>
+        <div id="allergyAddForm" style="padding:0 20px 16px;display:none"></div>`;
+    }
+
+    function renderAllergyItem(a, canEdit) {
+      const sevClass = a.severity || 'mild';
+      const emoji = SEVERITY_EMOJI[a.severity] || '🟢';
+      const typeLabel = ALLERGY_TYPE_LABEL[a.allergy_type] || a.allergy_type;
+      const actions = canEdit ? `
+        <div class="allergy-action">
+          <button class="icon-btn" onclick="showEditAllergyForm('${a.id}')" title="Editar">✏️</button>
+          <button class="icon-btn danger" onclick="deleteAllergy('${a.id}')" title="Eliminar">🗑️</button>
+        </div>` : '';
+      return `
+        <div class="allergy-item ${sevClass}" id="allergy-${a.id}">
+          <span>${emoji}</span>
+          <div style="flex:1">
+            <div class="allergy-allergen ${sevClass}">${a.allergen}</div>
+            <div class="allergy-meta">${typeLabel}${a.symptoms ? ' · ' + a.symptoms : ''}</div>
+          </div>
+          ${actions}
+        </div>`;
+    }
+
+    function showAddAllergyForm(petId) {
+      const el = document.getElementById('allergyAddForm');
+      el.style.display = 'block';
+      el.innerHTML = `
+        <div class="inline-form">
+          <label class="form-label">Alérgeno *</label>
+          <input type="text" id="newAllergenName" placeholder="Ej: Pollo, Penicilina, Polen" />
+          <div class="form-row">
+            <div style="flex:1">
+              <label class="form-label">Tipo</label>
+              <select id="newAllergyType">
+                <option value="food">Comida</option>
+                <option value="medication">Medicamento</option>
+                <option value="environmental">Ambiental</option>
+                <option value="other">Otro</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label class="form-label">Severidad</label>
+              <select id="newAllergySeverity">
+                <option value="mild">🟢 Leve</option>
+                <option value="moderate">🟡 Moderada</option>
+                <option value="severe">🔴 Severa</option>
+              </select>
+            </div>
+          </div>
+          <label class="form-label">Síntomas</label>
+          <input type="text" id="newAllergySymptoms" placeholder="Ej: Rash, picazón" />
+          <div class="modal-actions">
+            <button class="btn-secondary" onclick="hideAllergyAddForm()">Cancelar</button>
+            <button class="btn-primary" onclick="saveNewAllergy('${petId}')">Guardar</button>
+          </div>
+        </div>`;
+    }
+
+    function hideAllergyAddForm() {
+      const el = document.getElementById('allergyAddForm');
+      if (el) el.style.display = 'none';
+    }
+
+    async function saveNewAllergy(petId) {
+      const name = document.getElementById('newAllergenName').value.trim();
+      if (!name) { alert('El alérgeno es requerido'); return; }
+      const now = new Date().toISOString();
+      try {
+        const [saved] = await postData('allergies', {
+          pet_id: petId,
+          user_id: currentUser.id,
+          allergen: name,
+          allergy_type: document.getElementById('newAllergyType').value,
+          severity: document.getElementById('newAllergySeverity').value,
+          symptoms: document.getElementById('newAllergySymptoms').value.trim() || null,
+          created_at: now
+        });
+        hideAllergyAddForm();
+        const list = document.getElementById('allergyList');
+        const emptyEl = list.querySelector('.empty-text');
+        if (emptyEl) emptyEl.remove();
+        list.insertAdjacentHTML('beforeend', renderAllergyItem(saved, true));
+      } catch (e) {
+        alert('Error al guardar: ' + e.message);
+      }
+    }
+
+    function showEditAllergyForm(allergyId) {
+      const itemEl = document.getElementById('allergy-' + allergyId);
+      if (!itemEl) return;
+      // Find allergy data from DOM (simplified)
+      const allergenEl = itemEl.querySelector('.allergy-allergen');
+      const metaEl = itemEl.querySelector('.allergy-meta');
+      const allergen = allergenEl ? allergenEl.textContent.trim() : '';
+      itemEl.insertAdjacentHTML('afterend', `
+        <div class="inline-form" id="editAllergyForm-${allergyId}">
+          <label class="form-label">Alérgeno *</label>
+          <input type="text" id="editAllergen-${allergyId}" value="${allergen}" />
+          <div class="modal-actions">
+            <button class="btn-secondary" onclick="document.getElementById('editAllergyForm-${allergyId}').remove()">Cancelar</button>
+            <button class="btn-primary" onclick="saveEditAllergy('${allergyId}')">Guardar</button>
+          </div>
+        </div>`);
+    }
+
+    async function saveEditAllergy(allergyId) {
+      const allergen = document.getElementById('editAllergen-' + allergyId).value.trim();
+      if (!allergen) { alert('El alérgeno es requerido'); return; }
+      try {
+        await patchData(`allergies?id=eq.${allergyId}`, { allergen });
+        const formEl = document.getElementById('editAllergyForm-' + allergyId);
+        if (formEl) formEl.remove();
+        const nameEl = document.querySelector(`#allergy-${allergyId} .allergy-allergen`);
+        if (nameEl) nameEl.textContent = allergen;
+      } catch (e) {
+        alert('Error al guardar: ' + e.message);
+      }
+    }
+
+    async function deleteAllergy(allergyId) {
+      if (!confirm('¿Eliminar esta alergia?')) return;
+      try {
+        await deleteData(`allergies?id=eq.${allergyId}`);
+        const el = document.getElementById('allergy-' + allergyId);
+        if (el) el.remove();
+        const list = document.getElementById('allergyList');
+        if (list && !list.querySelector('.allergy-item')) {
+          list.innerHTML = '<p class="empty-text">Sin alergias registradas</p>';
+        }
+      } catch (e) {
+        alert('Error al eliminar: ' + e.message);
+      }
+    }
+
+    // ── Treatments ────────────────────────────────────────────────────────────
+
+    function renderTreatmentSection(treatments, petId) {
+      if (!treatments.length && !currentUser) return '';
+      const canEdit = !!currentUser;
+      const items = treatments.map(t => renderTreatmentCard(t, canEdit)).join('');
+      const addBtn = canEdit
+        ? `<button class="section-edit-btn" onclick="showAddTreatmentForm('${petId}')">+ Agregar</button>`
+        : '';
+      return `
+        <div class="divider"></div>
+        <div class="section-header">
+          <span class="section-title">🏥 Tratamientos activos</span>
+          ${addBtn}
+        </div>
+        <div class="treatment-list" id="treatmentList">
+          ${items || '<p class="empty-text" style="padding:0 20px 16px">Sin tratamientos activos</p>'}
+        </div>
+        <div id="treatmentAddForm" style="padding:0 20px 16px;display:none"></div>`;
+    }
+
+    function renderTreatmentCard(t, canEdit) {
+      const pct = t.session_count > 0 ? Math.round((t.completed_sessions / t.session_count) * 100) : 0;
+      const statusClass = 'status-' + (t.status || 'active');
+      const statusLabel = STATUS_LABEL[t.status] || t.status;
+      const datesHtml = t.start_date
+        ? `📅 Inicio: ${formatDate(t.start_date)}${t.expected_end_date ? ' · Fin est.: ' + formatDate(t.expected_end_date) : ''}`
+        : '';
+      const actions = canEdit ? `
+        <div class="treatment-actions">
+          <button class="btn-secondary" style="font-size:12px;padding:5px 10px;flex:none"
+            onclick="addTreatmentSession('${t.id}', ${t.completed_sessions}, ${t.session_count})">
+            +1 Sesión
+          </button>
+          <button class="icon-btn danger" onclick="deleteTreatment('${t.id}')" title="Eliminar">🗑️</button>
+        </div>` : '';
+      return `
+        <div class="treatment-card" id="treatment-${t.id}">
+          <div class="treatment-top">
+            <div class="treatment-condition">${t.condition}</div>
+            <span class="treatment-status ${statusClass}">${statusLabel}</span>
+          </div>
+          ${t.description ? `<div class="treatment-desc">${t.description}</div>` : ''}
+          <div class="progress-row">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progress-${t.id}" style="width:${pct}%"></div>
+            </div>
+            <span id="sessions-${t.id}">${t.completed_sessions}/${t.session_count}</span>
+          </div>
+          ${datesHtml ? `<div class="treatment-dates">${datesHtml}</div>` : ''}
+          ${actions}
+        </div>`;
+    }
+
+    async function addTreatmentSession(treatmentId, completed, total) {
+      if (completed >= total) { alert('Ya se completaron todas las sesiones'); return; }
+      const newCompleted = completed + 1;
+      const newStatus = newCompleted >= total ? 'completed' : 'active';
+      try {
+        await patchData(`treatments?id=eq.${treatmentId}`, {
+          completed_sessions: newCompleted,
+          status: newStatus,
+          updated_at: new Date().toISOString()
+        });
+        const sessEl = document.getElementById('sessions-' + treatmentId);
+        const progEl = document.getElementById('progress-' + treatmentId);
+        if (sessEl) sessEl.textContent = `${newCompleted}/${total}`;
+        if (progEl) progEl.style.width = `${Math.round((newCompleted / total) * 100)}%`;
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    async function deleteTreatment(treatmentId) {
+      if (!confirm('¿Eliminar este tratamiento?')) return;
+      try {
+        await deleteData(`treatments?id=eq.${treatmentId}`);
+        const el = document.getElementById('treatment-' + treatmentId);
+        if (el) el.remove();
+        const list = document.getElementById('treatmentList');
+        if (list && !list.querySelector('.treatment-card')) {
+          list.innerHTML = '<p class="empty-text">Sin tratamientos activos</p>';
+        }
+      } catch (e) {
+        alert('Error al eliminar: ' + e.message);
+      }
+    }
+
+    function showAddTreatmentForm(petId) {
+      const el = document.getElementById('treatmentAddForm');
+      el.style.display = 'block';
+      el.innerHTML = `
+        <div class="inline-form">
+          <label class="form-label">Condición / Diagnóstico *</label>
+          <input type="text" id="newTreatmentCondition" placeholder="Ej: Dermatitis, Artritis" />
+          <label class="form-label">Descripción</label>
+          <input type="text" id="newTreatmentDesc" placeholder="Notas sobre la condición" />
+          <div class="form-row">
+            <div style="flex:1">
+              <label class="form-label">Total sesiones *</label>
+              <input type="number" id="newTreatmentSessions" value="1" min="1" />
+            </div>
+            <div style="flex:1">
+              <label class="form-label">Fecha inicio</label>
+              <input type="date" id="newTreatmentStart" value="${new Date().toISOString().split('T')[0]}" />
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" onclick="hideAddTreatmentForm()">Cancelar</button>
+            <button class="btn-primary" onclick="saveNewTreatment('${petId}')">Guardar</button>
+          </div>
+        </div>`;
+    }
+
+    function hideAddTreatmentForm() {
+      const el = document.getElementById('treatmentAddForm');
+      if (el) el.style.display = 'none';
+    }
+
+    async function saveNewTreatment(petId) {
+      const condition = document.getElementById('newTreatmentCondition').value.trim();
+      const sessions = parseInt(document.getElementById('newTreatmentSessions').value) || 1;
+      const startDate = document.getElementById('newTreatmentStart').value;
+      if (!condition) { alert('La condición es requerida'); return; }
+      const now = new Date().toISOString();
+      try {
+        const [saved] = await postData('treatments', {
+          pet_id: petId,
+          user_id: currentUser.id,
+          condition,
+          description: document.getElementById('newTreatmentDesc').value.trim() || null,
+          start_date: startDate || null,
+          status: 'active',
+          session_count: sessions,
+          completed_sessions: 0,
+          created_at: now,
+          updated_at: now
+        });
+        hideAddTreatmentForm();
+        const list = document.getElementById('treatmentList');
+        const emptyEl = list.querySelector('.empty-text');
+        if (emptyEl) emptyEl.remove();
+        list.insertAdjacentHTML('beforeend', renderTreatmentCard(saved, true));
+      } catch (e) {
+        alert('Error al guardar: ' + e.message);
+      }
+    }
+
+    // ── Medications ───────────────────────────────────────────────────────────
+
+    function renderMedicationSection(medications) {
+      if (!medications.length) return '';
+      const items = medications.map(m => `
+        <div class="medication-item">
+          <span class="medication-icon">💊</span>
+          <div class="medication-info">
+            <div class="medication-name">${m.name}</div>
+            <div class="medication-detail">${m.dosage} · ${m.frequency}${m.prescribed_by ? ' · Dr. ' + m.prescribed_by : ''}</div>
+          </div>
+          ${m.reminder_enabled ? '<span class="medication-reminder" title="Con recordatorio">🔔</span>' : ''}
+        </div>`).join('');
+      return `
+        <div class="divider"></div>
+        <div class="section-header">
+          <span class="section-title">💊 Medicamentos activos</span>
+        </div>
+        <div class="medication-list">${items}</div>`;
+    }
+
+    // ── Main load ─────────────────────────────────────────────────────────────
+
     async function load() {
       const petId = getPetId();
       if (!petId || petId.length < 10) { renderError('ID de mascota no válido'); return; }
 
+      document.getElementById('card').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Cargando perfil...</p>
+        </div>`;
+
       try {
-        // 1. Mascota + registros médicos en paralelo
-        const [pets, records] = await Promise.all([
+        const today = new Date();
+
+        const [pets, records, treatments, medications, allergies] = await Promise.all([
           fetchData(`pets?id=eq.${petId}&select=*`),
-          fetchData(`medical_records?pet_id=eq.${petId}&select=*&order=date.desc&limit=5`)
+          fetchData(`medical_records?pet_id=eq.${petId}&select=*&order=date.desc&limit=5`),
+          fetchData(`treatments?pet_id=eq.${petId}&select=*&status=eq.active&order=created_at.desc`),
+          fetchData(`medications?pet_id=eq.${petId}&select=*&order=created_at.desc`),
+          fetchData(`allergies?pet_id=eq.${petId}&select=*&order=severity.desc`)
         ]);
 
         if (!pets.length) { renderError('Mascota no encontrada'); return; }
+
+        // Filter medications: no end_date or end_date >= today
+        const todayStr = today.toISOString().split('T')[0];
+        const activeMeds = medications.filter(m => !m.end_date || m.end_date >= todayStr);
+
         const p = pets[0];
-
-        // 2. Perfil del dueño (requiere policy pública de lectura en profiles)
-        let owner = null;
-        try {
-          const profiles = await fetchData(`profiles?id=eq.${p.user_id}&select=display_name,phone_number`);
-          owner = profiles[0] || null;
-        } catch (_) { /* sin perfil público — se omite sección dueño */ }
-
-        // ---- Render ----
         const shortId = p.id.substring(0, 8).toUpperCase();
         const emoji = SPECIES_EMOJI[p.species] || '🐾';
         const speciesLabel = SPECIES_LABEL[p.species] || p.species;
-        const today = new Date().toLocaleDateString('es-CL');
+        const todayFormatted = today.toLocaleDateString('es-CL');
+
+        let historyHtml = '';
+        if (records.length > 0) {
+          historyHtml = `
+            <div class="divider"></div>
+            <div class="section-header">
+              <span class="section-title">🏥 Historial reciente</span>
+            </div>
+            <div class="history-list">
+              ${records.map(r => `
+                <div>
+                  <div class="history-item">
+                    <span class="history-emoji">${TYPE_EMOJI[r.type] || '📌'}</span>
+                    <span class="history-title">${r.title}</span>
+                    <span class="history-date">${formatDate(r.date)}</span>
+                  </div>
+                  ${r.next_due_date ? `<div class="history-next">📅 Próximo: ${formatDate(r.next_due_date)}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>`;
+        }
+
+        const notesHtml = p.notes ? `
+          <div class="notes-box">
+            <span>📝</span>
+            <span>${p.notes}</span>
+          </div>` : '';
 
         const avatarHtml = p.photo_url
           ? `<img src="${p.photo_url}" alt="${p.name}" />`
           : emoji;
 
-        const ownerHtml = owner
-          ? `<div class="owner-row">
-               <span>👤</span>
-               <span class="owner-name">${owner.display_name || 'Dueño'}</span>
-               ${owner.phone_number
-                 ? `<span class="owner-phone">📞 ${owner.phone_number}</span>`
-                 : ''}
-             </div>`
-          : '';
-
-        const notesHtml = p.notes
-          ? `<div class="notes-box"><span>📝</span><span>${p.notes}</span></div>`
-          : '';
-
-        const historyHtml = records.length
-          ? `<div class="divider"></div>
-             <div class="history-header">🏥 Historial reciente</div>
-             <div class="history-list">
-               ${records.map(r => `
-                 <div>
-                   <div class="history-item">
-                     <span class="history-emoji">${TYPE_EMOJI[r.type] || '📌'}</span>
-                     <span class="history-title">${r.title}</span>
-                     <span class="history-date">${formatDate(r.date)}</span>
-                   </div>
-                   ${r.next_due_date
-                     ? `<div class="history-next">📅 Próximo: ${formatDate(r.next_due_date)}</div>`
-                     : ''}
-                 </div>`).join('')}
-             </div>`
-          : '';
+        const allergySection = renderAllergySection(allergies, petId);
+        const treatmentSection = renderTreatmentSection(treatments, petId);
+        const medicationSection = renderMedicationSection(activeMeds);
 
         document.getElementById('card').innerHTML = `
           <div class="card-header">
@@ -313,47 +988,40 @@
             <div class="pawrtner-logo">🐾<br>Pawrtner</div>
           </div>
 
-          ${ownerHtml}
-
           <div class="card-body">
             <div class="info-row">
               <span class="info-icon">🎂</span>
-              <span>
-                <span class="info-label">Nacimiento: </span>
-                <span class="info-value">${formatDate(p.birth_date)} (${calcAge(p.birth_date)})</span>
-              </span>
+              <span><span class="info-label">Nacimiento: </span>
+              <span class="info-value">${formatDate(p.birth_date)} (${calcAge(p.birth_date)})</span></span>
             </div>
             <div class="info-row">
               <span class="info-icon">${p.sex === 'male' ? '♂️' : '♀️'}</span>
-              <span>
-                <span class="info-label">Sexo: </span>
-                <span class="info-value">${p.sex === 'male' ? 'Macho' : 'Hembra'}${p.is_neutered ? ' • Castrado/a' : ''}</span>
-              </span>
+              <span><span class="info-label">Sexo: </span>
+              <span class="info-value">${p.sex === 'male' ? 'Macho' : 'Hembra'}${p.is_neutered ? ' • Castrado/a' : ''}</span></span>
             </div>
             ${p.weight_kg ? `
             <div class="info-row">
               <span class="info-icon">⚖️</span>
-              <span>
-                <span class="info-label">Peso: </span>
-                <span class="info-value">${p.weight_kg} kg</span>
-              </span>
+              <span><span class="info-label">Peso: </span>
+              <span class="info-value">${p.weight_kg} kg</span></span>
             </div>` : ''}
             ${p.color ? `
             <div class="info-row">
               <span class="info-icon">🎨</span>
-              <span>
-                <span class="info-label">Color: </span>
-                <span class="info-value">${p.color}</span>
-              </span>
+              <span><span class="info-label">Color: </span>
+              <span class="info-value">${p.color}</span></span>
             </div>` : ''}
             ${notesHtml}
           </div>
 
+          ${allergySection}
+          ${treatmentSection}
+          ${medicationSection}
           ${historyHtml}
 
           <div class="card-footer">
             <span>Generado con Pawrtner</span>
-            <span>${today}</span>
+            <span>${todayFormatted}</span>
           </div>`;
 
       } catch (e) {
