@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pawrtner — Perfil de Mascota</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #F0F4F2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: #2D6A4F;
+      font-weight: 800;
+      font-size: 20px;
+    }
+    .app-header span { font-size: 24px; }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Card header */
+    .card-header {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pet-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .pet-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .pet-header-info { flex: 1; }
+    .pet-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+    }
+    .pet-breed {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 2px;
+    }
+    .pet-id-badge {
+      background: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .pawrtner-logo {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    /* Card body */
+    .card-body { padding: 20px; }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .info-icon { font-size: 15px; margin-top: 1px; }
+    .info-label { color: #6B7280; }
+    .info-value { font-weight: 600; color: #1A1A2E; }
+    .notes-box {
+      background: #F8FAF9;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #1A1A2E;
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    /* Divider */
+    .divider { height: 1px; background: #E5E7EB; margin: 0; }
+
+    /* Medical history */
+    .history-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 20px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #2D6A4F;
+    }
+    .history-list { padding: 0 20px 16px; }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-emoji { font-size: 15px; }
+    .history-title { flex: 1; font-weight: 600; color: #1A1A2E; }
+    .history-date { color: #6B7280; font-size: 12px; white-space: nowrap; }
+    .history-next {
+      font-size: 11px;
+      color: #2D6A4F;
+      margin-left: 23px;
+      margin-top: -4px;
+      margin-bottom: 4px;
+    }
+
+    /* Footer */
+    .card-footer {
+      background: #F8FAF9;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: rgba(107,114,128,0.7);
+    }
+
+    /* States */
+    .loading {
+      text-align: center;
+      padding: 48px 0;
+      color: #6B7280;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #E5E7EB;
+      border-top-color: #2D6A4F;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg {
+      text-align: center;
+      padding: 48px 20px;
+      color: #E63946;
+    }
+    .error-msg h2 { font-size: 18px; margin-bottom: 8px; }
+    .error-msg p { font-size: 14px; color: #6B7280; }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <span>🐾</span> Pawrtner
+  </div>
+
+  <div class="card" id="card">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Cargando perfil...</p>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://czpfboiqtefmefvmvmsx.supabase.co';
+    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6cGZib2lxdGVmbWVmdm12bXN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDg5MTYsImV4cCI6MjA5MTA4NDkxNn0.kuGlOWVIS4P81ablwFHY2_WEoUij2PX71fHIPHNiESg';
+
+    const SPECIES_LABEL = {
+      dog: 'Perro', cat: 'Gato', bird: 'Ave',
+      rabbit: 'Conejo', fish: 'Pez', reptile: 'Reptil', other: 'Otro'
+    };
+    const SPECIES_EMOJI = {
+      dog: '🐕', cat: '🐈', bird: '🐦',
+      rabbit: '🐇', fish: '🐠', reptile: '🦎', other: '🐾'
+    };
+    const TYPE_LABEL = {
+      vaccine: 'Vacuna', vetVisit: 'Visita veterinaria', grooming: 'Peluquería',
+      deworm: 'Desparasitación', medication: 'Medicamento',
+      surgery: 'Cirugía', exam: 'Control rutinario', other: 'Otro'
+    };
+    const TYPE_EMOJI = {
+      vaccine: '💉', vetVisit: '🩺', grooming: '✂️',
+      deworm: '💊', medication: '🩹', surgery: '🔬', exam: '📋', other: '📌'
+    };
+
+    function getPetId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id') || window.location.pathname.split('/').filter(Boolean).pop();
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function calcAge(birthDate) {
+      const birth = new Date(birthDate);
+      const now = new Date();
+      let months = (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth();
+      if (months < 0) months = 0;
+      const years = Math.floor(months / 12);
+      if (years >= 1) return `${years} ${years === 1 ? 'año' : 'años'}`;
+      return `${months} ${months === 1 ? 'mes' : 'meses'}`;
+    }
+
+    async function fetchData(endpoint) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+        headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` }
+      });
+      if (!res.ok) throw new Error(res.status);
+      return res.json();
+    }
+
+    function renderError(msg) {
+      document.getElementById('card').innerHTML = `
+        <div class="error-msg">
+          <h2>🐾</h2>
+          <h2>${msg}</h2>
+          <p>Verifica que el código QR sea válido.</p>
+        </div>`;
+    }
+
+    async function load() {
+      const petId = getPetId();
+      if (!petId || petId.length < 10) { renderError('ID de mascota no válido'); return; }
+
+      try {
+        const [pets, records] = await Promise.all([
+          fetchData(`pets?id=eq.${petId}&select=*`),
+          fetchData(`medical_records?pet_id=eq.${petId}&select=*&order=date.desc&limit=5`)
+        ]);
+
+        if (!pets.length) { renderError('Mascota no encontrada'); return; }
+
+        const p = pets[0];
+        const shortId = p.id.substring(0, 8).toUpperCase();
+        const emoji = SPECIES_EMOJI[p.species] || '🐾';
+        const speciesLabel = SPECIES_LABEL[p.species] || p.species;
+        const today = new Date().toLocaleDateString('es-CL');
+
+        let historyHtml = '';
+        if (records.length > 0) {
+          historyHtml = `
+            <div class="divider"></div>
+            <div class="history-header">🏥 Historial reciente</div>
+            <div class="history-list">
+              ${records.map(r => `
+                <div>
+                  <div class="history-item">
+                    <span class="history-emoji">${TYPE_EMOJI[r.type] || '📌'}</span>
+                    <span class="history-title">${r.title}</span>
+                    <span class="history-date">${formatDate(r.date)}</span>
+                  </div>
+                  ${r.next_due_date ? `<div class="history-next">📅 Próximo: ${formatDate(r.next_due_date)}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>`;
+        }
+
+        const notesHtml = p.notes ? `
+          <div class="notes-box">
+            <span>📝</span>
+            <span>${p.notes}</span>
+          </div>` : '';
+
+        const avatarHtml = p.photo_url
+          ? `<img src="${p.photo_url}" alt="${p.name}" />`
+          : emoji;
+
+        document.getElementById('card').innerHTML = `
+          <div class="card-header">
+            <div class="pet-avatar">${avatarHtml}</div>
+            <div class="pet-header-info">
+              <div class="pet-name">${p.name}</div>
+              <div class="pet-breed">${speciesLabel} • ${p.breed}</div>
+              <div class="pet-id-badge">ID: ${shortId}</div>
+            </div>
+            <div class="pawrtner-logo">🐾<br>Pawrtner</div>
+          </div>
+
+          <div class="card-body">
+            <div class="info-row">
+              <span class="info-icon">🎂</span>
+              <span><span class="info-label">Nacimiento: </span>
+              <span class="info-value">${formatDate(p.birth_date)} (${calcAge(p.birth_date)})</span></span>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">${p.sex === 'male' ? '♂️' : '♀️'}</span>
+              <span><span class="info-label">Sexo: </span>
+              <span class="info-value">${p.sex === 'male' ? 'Macho' : 'Hembra'}${p.is_neutered ? ' • Castrado/a' : ''}</span></span>
+            </div>
+            ${p.weight_kg ? `
+            <div class="info-row">
+              <span class="info-icon">⚖️</span>
+              <span><span class="info-label">Peso: </span>
+              <span class="info-value">${p.weight_kg} kg</span></span>
+            </div>` : ''}
+            ${p.color ? `
+            <div class="info-row">
+              <span class="info-icon">🎨</span>
+              <span><span class="info-label">Color: </span>
+              <span class="info-value">${p.color}</span></span>
+            </div>` : ''}
+            ${notesHtml}
+          </div>
+
+          ${historyHtml}
+
+          <div class="card-footer">
+            <span>Generado con Pawrtner</span>
+            <span>${today}</span>
+          </div>`;
+
+      } catch (e) {
+        renderError('Error al cargar el perfil');
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>
