@@ -74,6 +74,17 @@
     }
     .pawrtner-logo { color: white; font-size: 11px; font-weight: 700; text-align: center; opacity: 0.9; }
 
+    /* Owner row */
+    .owner-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 20px;
+      background: rgba(45,106,79,0.05);
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .owner-item { font-size: 13px; color: #374151; font-weight: 600; }
+
     /* Card body */
     .card-body { padding: 20px; }
     .info-row {
@@ -263,6 +274,11 @@
       if (!pets.length) { renderError('Mascota no encontrada'); return; }
 
       const p = pets[0];
+
+      // Fetch owner profile (may return [] if RLS doesn't allow public read)
+      const profiles = await fetchSafe(`profiles?id=eq.${p.user_id}&select=display_name,phone_number`);
+      const owner = profiles[0] || null;
+
       const todayStr = new Date().toISOString().split('T')[0];
       const activeMeds = medications.filter(m => !m.end_date || m.end_date >= todayStr);
 
@@ -366,6 +382,12 @@
           </div>
           <div class="pawrtner-logo">🐾<br>Pawrtner</div>
         </div>
+
+        ${owner && (owner.display_name || owner.phone_number) ? `
+        <div class="owner-row">
+          ${owner.display_name ? `<span class="owner-item">👤 ${owner.display_name}</span>` : ''}
+          ${owner.phone_number ? `<span class="owner-item">📞 ${owner.phone_number}</span>` : ''}
+        </div>` : ''}
 
         <div class="card-body">
           <div class="info-row">
