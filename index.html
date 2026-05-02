@@ -100,13 +100,17 @@
     .hero-paws span:nth-child(5) { bottom: 40px; left: 28px; font-size: 20px; transform: rotate(34deg); }
     .hero-paws span:nth-child(6) { bottom: 60px; right: 18px; font-size: 26px; transform: rotate(-22deg); }
 
+    .hero-top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
     .brand {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 13px; font-weight: 800;
       color: rgba(255,255,255,0.92);
       letter-spacing: 0.5px;
-      margin-bottom: 18px;
-      position: relative; z-index: 1;
     }
 
     .pet-avatar {
@@ -138,16 +142,15 @@
 
     .verified-pill {
       display: inline-flex; align-items: center; gap: 4px;
-      margin-top: 14px;
       padding: 5px 12px;
-      background: rgba(255,255,255,0.96);
-      color: var(--primary-dark);
+      background: rgba(255,255,255,0.18);
+      color: white;
       border-radius: var(--radius-pill);
       font-size: 11px; font-weight: 800;
       letter-spacing: 0.6px;
-      position: relative; z-index: 1;
+      backdrop-filter: blur(8px);
     }
-    .verified-pill::before { content: "✓"; font-weight: 900; }
+    .verified-pill::after { content: "✓"; font-weight: 900; }
 
     .header-curve {
       position: absolute;
@@ -251,28 +254,28 @@
     .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
     .actions > * { flex: 1; min-width: 0; }
 
-    /* ── Datos grid ────────────────────────────────────────────────── */
-    .data-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    /* ── Datos esenciales (lista label | value) ─────────────────────── */
+    .data-list {
+      display: flex; flex-direction: column;
     }
-    .data-cell {
-      background: var(--surface-muted);
-      border-radius: var(--radius-md);
-      padding: 10px 12px;
+    .data-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
     }
-    .data-label {
-      font-size: 11px; font-weight: 700;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex; align-items: center; gap: 4px;
+    .data-row:last-child { border-bottom: none; }
+    .data-row .data-label {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: none;
+      letter-spacing: 0;
     }
-    .data-value {
+    .data-row .data-value {
       font-size: 14px; font-weight: 700;
       color: var(--text-primary);
-      margin-top: 4px;
+      text-align: right;
+      margin: 0;
     }
 
     .notes-box {
@@ -295,13 +298,39 @@
       margin-top: 4px;
     }
     .contact-avatar {
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       border-radius: 50%;
-      background: color-mix(in srgb, var(--primary) 14%, transparent);
-      color: var(--primary);
+      background: var(--primary);
+      color: white;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      font-size: 14px; font-weight: 800;
+      letter-spacing: 0.5px;
       flex-shrink: 0;
+    }
+    .contact-address {
+      font-size: 12px; font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    /* Action bar arriba del card de contactos (Llamar duenio / WhatsApp) */
+    .contact-actions-primary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .contact-actions-primary .sl-btn-primary,
+    .contact-actions-primary .sl-btn-soft {
+      height: 56px;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+      padding: 8px;
+    }
+    .contact-actions-primary .sl-btn-soft {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
     }
     .contact-info { flex: 1; min-width: 0; }
     .contact-name {
@@ -490,13 +519,21 @@
         </div>`;
     }
 
-    function renderContactRow(person, roleLabel) {
+    function getInitials(name) {
+      if (!name) return '?';
+      const parts = String(name).trim().split(/\s+/).slice(0, 2);
+      return parts.map(p => p.charAt(0).toUpperCase()).join('') || '?';
+    }
+
+    function renderContactRow(person, roleLabel, { showActions = false } = {}) {
       const name = escapeHtml(person.display_name || 'Sin nombre');
       const phone = (person.phone_number || '').trim();
       const phoneClean = phone.replace(/\s+/g, '');
       const wa = phoneClean.replace(/[^\d+]/g, '');
+      const initials = escapeHtml(getInitials(person.display_name));
+      const address = (person.address || '').trim();
 
-      const actions = phone ? `
+      const actions = (showActions && phone) ? `
         <div class="actions">
           <a class="sl-btn-primary" href="tel:${escapeHtml(phoneClean)}">📞 Llamar</a>
           <a class="sl-btn-soft" href="https://wa.me/${escapeHtml(wa)}" target="_blank" rel="noopener">WhatsApp</a>
@@ -504,17 +541,75 @@
 
       return `
         <div class="contact-row">
-          <div class="contact-avatar">👤</div>
+          <div class="contact-avatar">${initials}</div>
           <div class="contact-info">
             <div class="contact-name">
               ${name}
               <span class="sl-pill sl-pill-primary">${escapeHtml(roleLabel)}</span>
             </div>
             ${phone ? `<div class="contact-phone-text">${escapeHtml(phone)}</div>` : ''}
+            ${address ? `<div class="contact-address">${escapeHtml(address)}</div>` : ''}
           </div>
         </div>
         ${actions}
       `;
+    }
+
+    function renderPrimaryContactActions(person) {
+      const phone = (person?.phone_number || '').trim();
+      if (!phone) return '';
+      const phoneClean = phone.replace(/\s+/g, '');
+      const wa = phoneClean.replace(/[^\d+]/g, '');
+      return `
+        <div class="contact-actions-primary">
+          <a class="sl-btn-primary" href="tel:${escapeHtml(phoneClean)}">
+            <span style="font-size:18px;">📞</span>
+            <span>Llamar dueño</span>
+          </a>
+          <a class="sl-btn-soft" href="https://wa.me/${escapeHtml(wa)}" target="_blank" rel="noopener">
+            <span style="font-size:18px;">💬</span>
+            <span>WhatsApp</span>
+          </a>
+        </div>`;
+    }
+
+    /**
+     * Loguea un escaneo del QR cuando la mascota esta en modo "Se busca".
+     * Pide geo del navegador (opt-in del usuario). Si la persona niega o
+     * el navegador no soporta geo, igual loguea el escaneo sin coords.
+     * Best-effort: cualquier error se ignora silencioso.
+     */
+    function logScanWithGeo(petId) {
+      const send = (lat, lng, accuracy) => {
+        const body = {
+          pet_id: petId,
+          user_agent: (navigator.userAgent || '').slice(0, 500),
+        };
+        if (typeof lat === 'number') body.lat = lat;
+        if (typeof lng === 'number') body.lng = lng;
+        if (typeof accuracy === 'number') body.accuracy_m = accuracy;
+
+        fetch(`${SUPABASE_URL}/functions/v1/log-pet-scan`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: ANON_KEY,
+            Authorization: `Bearer ${ANON_KEY}`,
+          },
+          body: JSON.stringify(body),
+          keepalive: true,
+        }).catch(() => {/* ignore */});
+      };
+
+      if (!('geolocation' in navigator)) {
+        send();
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => send(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
+        () => send(),
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+      );
     }
 
     async function load() {
@@ -557,7 +652,13 @@
 
       const emoji   = SPECIES_EMOJI[p.species] || '🐾';
       const speciesLabel = SPECIES_LABEL[p.species] || p.species;
-      const breed   = p.breed ? `${escapeHtml(speciesLabel)} · ${escapeHtml(p.breed)}` : escapeHtml(speciesLabel);
+      // Subtitulo: raza · edad · sexo (cuando aplique)
+      const subtitleParts = [];
+      if (p.breed) subtitleParts.push(escapeHtml(p.breed));
+      else subtitleParts.push(escapeHtml(speciesLabel));
+      if (p.birth_date) subtitleParts.push(calcAge(p.birth_date));
+      if (p.sex) subtitleParts.push(p.sex === 'male' ? 'Macho' : 'Hembra');
+      const subtitle = subtitleParts.join(' · ');
 
       const avatarHtml = p.photo_url
         ? `<img src="${escapeHtml(p.photo_url)}" alt="${escapeHtml(p.name)}" />`
@@ -570,11 +671,13 @@
             <span>🐾</span><span>🐾</span><span>🐾</span>
             <span>🐾</span><span>🐾</span><span>🐾</span>
           </div>
-          <div class="brand">🐾 PAWRTNER</div>
+          <div class="hero-top">
+            <div class="brand">🐾 PAWRTNER · ID</div>
+            <div class="verified-pill">VERIFICADA</div>
+          </div>
           <div class="pet-avatar">${avatarHtml}</div>
-          <div class="pet-name">${escapeHtml(p.name)}</div>
-          <div class="pet-subtitle">${breed}</div>
-          <div class="verified-pill">VERIFICADA</div>
+          <div class="pet-name">${escapeHtml(p.name)} 🐾</div>
+          <div class="pet-subtitle">${subtitle}</div>
           <svg class="header-curve" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true">
             <path d="M0 0 C 33 4 67 4 100 0 V 4 H 0 Z" fill="var(--bg)"/>
           </svg>
@@ -586,61 +689,87 @@
         <div class="sl-tinted sl-tinted-danger">
           <div class="sl-tinted-icon">⚠️</div>
           <div class="sl-tinted-body">
-            <div class="sl-tinted-title">Alergia severa</div>
-            <div class="sl-tinted-text">${severeAllergies.map(a => escapeHtml(a.allergen)).join(' · ')}</div>
+            <div class="sl-tinted-title">ALERGIA SEVERA</div>
+            <div class="sl-tinted-text">${severeAllergies.map(a => escapeHtml(a.allergen)).join(' · ')} · evitar contacto</div>
           </div>
         </div>` : '';
 
-      // ── Datos card ─────────────────────────────────────────────────
-      const dataCells = [];
-      if (p.birth_date) {
-        dataCells.push(`
-          <div class="data-cell">
-            <div class="data-label">🎂 Edad</div>
-            <div class="data-value">${calcAge(p.birth_date)}</div>
+      // ── Banner "Se busca" + log del escaneo ───────────────────────
+      const lostBanner = p.is_lost ? `
+        <div class="sl-tinted sl-tinted-danger" style="background:#FEE2E2;border:2px solid #DC2626;">
+          <div class="sl-tinted-icon">🔍</div>
+          <div class="sl-tinted-body">
+            <div class="sl-tinted-title" style="color:#991B1B;">SE BUSCA — MASCOTA PERDIDA</div>
+            <div class="sl-tinted-text" style="color:#7F1D1D;">El dueño está buscando a ${escapeHtml(p.name)}. Si la encontraste, contactalo abajo. Tu ubicación ayuda a recuperarla.</div>
+          </div>
+        </div>` : '';
+
+      if (p.is_lost) {
+        // Disparar log con geo (best-effort, no bloquea el render).
+        logScanWithGeo(p.id);
+      }
+
+      // ── Primary contact actions (Llamar dueño / WhatsApp) ─────────
+      const primaryActionsHtml = owner ? renderPrimaryContactActions(owner) : '';
+
+      // ── Datos esenciales (lista vertical label | value) ───────────
+      const dataRows = [];
+      if (p.microchip) {
+        dataRows.push(`
+          <div class="data-row">
+            <span class="data-label">Microchip</span>
+            <span class="data-value">${escapeHtml(p.microchip)}</span>
           </div>`);
       }
       if (p.weight_kg) {
-        dataCells.push(`
-          <div class="data-cell">
-            <div class="data-label">⚖️ Peso</div>
-            <div class="data-value">${escapeHtml(p.weight_kg)} kg</div>
-          </div>`);
-      }
-      if (p.sex) {
-        const sexLabel = (p.sex === 'male' ? 'Macho' : 'Hembra') + (p.is_neutered ? ' · Castrado/a' : '');
-        dataCells.push(`
-          <div class="data-cell">
-            <div class="data-label">${p.sex === 'male' ? '♂️' : '♀️'} Sexo</div>
-            <div class="data-value">${escapeHtml(sexLabel)}</div>
+        dataRows.push(`
+          <div class="data-row">
+            <span class="data-label">Peso</span>
+            <span class="data-value">${escapeHtml(p.weight_kg)} kg</span>
           </div>`);
       }
       if (p.color) {
-        dataCells.push(`
-          <div class="data-cell">
-            <div class="data-label">🎨 Color</div>
-            <div class="data-value">${escapeHtml(p.color)}</div>
+        dataRows.push(`
+          <div class="data-row">
+            <span class="data-label">Color</span>
+            <span class="data-value">${escapeHtml(p.color)}</span>
+          </div>`);
+      }
+      if (typeof p.is_neutered === 'boolean') {
+        dataRows.push(`
+          <div class="data-row">
+            <span class="data-label">${p.sex === 'male' ? 'Castrado' : 'Esterilizada'}</span>
+            <span class="data-value">${p.is_neutered ? 'Sí' : 'No'}</span>
           </div>`);
       }
 
-      const datosHtml = dataCells.length ? `
+      const datosHtml = dataRows.length ? `
         <div class="sl-card">
-          <h3>📋 Datos</h3>
-          <div class="data-grid">${dataCells.join('')}</div>
+          <h3>Datos esenciales</h3>
+          <div class="data-list">${dataRows.join('')}</div>
           ${p.notes ? `<div class="notes-box"><span>📝</span><span>${escapeHtml(p.notes)}</span></div>` : ''}
         </div>` : '';
 
       // ── Contactos ──────────────────────────────────────────────────
+      // Las acciones primarias (Llamar/WhatsApp) ya estan arriba (debajo del
+      // banner de alergia), asi que aqui solo mostramos info, sin botones.
       const hasOwner = owner && (owner.display_name || owner.phone_number);
       const hasCoOwners = coOwners && coOwners.length > 0;
-      let contactsHtml = '';
-      if (hasOwner || hasCoOwners) {
-        const rows = [];
-        if (hasOwner) rows.push(renderContactRow(owner, 'Dueño'));
-        coOwners.forEach(co => rows.push(renderContactRow(co, 'Co-dueño')));
-        contactsHtml = `
+      let ownerCardHtml = '';
+      let coOwnersHtml = '';
+      if (hasOwner) {
+        const sexRoleLabel = (owner.display_name || '').toLowerCase().endsWith('a') ? 'Mi dueña' : 'Mi dueño';
+        ownerCardHtml = `
           <div class="sl-card">
-            <h3>🏠 ¿Me encontraste? Contacta</h3>
+            <h3>${escapeHtml(sexRoleLabel)}</h3>
+            ${renderContactRow(owner, 'Dueño')}
+          </div>`;
+      }
+      if (hasCoOwners) {
+        const rows = coOwners.map(co => renderContactRow(co, 'Co-dueño', { showActions: true }));
+        coOwnersHtml = `
+          <div class="sl-card">
+            <h3>Otros contactos</h3>
             ${rows.join('')}
           </div>`;
       }
@@ -742,9 +871,12 @@
       document.getElementById('page').innerHTML = `
         ${heroHtml}
         <div class="content">
+          ${lostBanner}
           ${severeBanner}
+          ${primaryActionsHtml}
+          ${ownerCardHtml}
           ${datosHtml}
-          ${contactsHtml}
+          ${coOwnersHtml}
           ${allergiesHtml}
           ${treatmentsHtml}
           ${medsHtml}
